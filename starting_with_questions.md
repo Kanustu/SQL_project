@@ -17,15 +17,17 @@ WITH cte_revenue AS (SELECT
                      FROM all_sessions)
                      
 -- countries with highest revenue
-SELECT country, SUM(total_transaction_revenue) AS total_country_revenue FROM cte_revenue 
+SELECT country, SUM(total_transaction_revenue) AS total_country_revenue
+    FROM cte_revenue 
 GROUP BY country
-HAVING SUM(total_transaction_revenue) > 0
+    HAVING SUM(total_transaction_revenue) > 0
 ORDER BY total_country_revenue DESC
 
 -- cities with highest revenue
-SELECT city, SUM(total_transaction_revenue) AS total_city_revenue FROM cte_revenue 
+SELECT city, SUM(total_transaction_revenue) AS total_city_revenue
+    FROM cte_revenue 
 GROUP BY city
-HAVING city != 'N/A' AND SUM(total_transaction_revenue) > 0
+    HAVING city != 'N/A' AND SUM(total_transaction_revenue) > 0
 ORDER BY total_city_revenue DESC
 
 ```
@@ -35,37 +37,36 @@ ORDER BY total_city_revenue DESC
 
 Answer:
 
-|country	|    total_country_revenue |       
-|---------------|   ------------------------ |
-"United States"	|    13154.17
-"Israel"	|    602.00
-"Australia"	|     358.00
-"Canada"	|     150.15
-"Switzerland"	|     16.99
+| **country**   | **total_country_revenue** |
+|---------------|---------------------------|
+| United States | 13154.17                  |
+| Israel        | 602.00                    |
+| Australia     | 358.00                    |
+| Canada        | 150.15                    |
+| Switzerland   | 16.99                     |
 
 
-|city           |total_city_revenue|
-|---------------|------------------|
-"San Francisco"	| 1564.32
-"Sunnyvale"	|     992.23
-"Atlanta"	|     854.44
-"Palo Alto"	|     608.00
-"Tel Aviv-Yafo"	| 602.00
-"New York"	|     598.35
-"Mountain View"	| 483.36
-"Los Angeles"	| 479.48
-"Chicago"	|     449.52
-"Seattle"	|     358.00
-"Sydney"	|     358.00
-"San Jose"	|     262.38
-"Austin"	|     157.78
-"Nashville"	|     157.00
-"San Bruno"	|     103.77
-"Toronto"	|     82.16
-"Houston"	|     38.98
-"Columbus"	|     21.99
-"Zurich"	|     16.99
-
+| **city**      | **total_city_revenue** |
+|---------------|------------------------|
+| San Francisco | 1564.32                |
+| Sunnyvale     | 992.23                 |
+| Atlanta       | 854.44                 |
+| Palo Alto     | 608.00                 |
+| Tel Aviv-Yafo | 602.00                 |
+| New York      | 598.35                 |
+| Mountain View | 483.36                 |
+| Los Angeles   | 479.48                 |
+| Chicago       | 449.52                 |
+| Seattle       | 358.00                 |
+| Sydney        | 358.00                 |
+| San Jose      | 262.38                 |
+| Austin        | 157.78                 |
+| Nashville     | 157.00                 |
+| San Bruno     | 103.77                 |
+| Toronto       | 82.16                  |
+| Houston       | 38.98                  |
+| Columbus      | 21.99                  |
+| Zurich        | 16.99                  |
 
 **Question 2: What is the average number of products ordered from visitors in each city and country?**
 
@@ -75,19 +76,19 @@ SQL Queries:
 
 --calculating order avg by city
 SELECT u.city, CAST(AVG(total_ordered) AS numeric(5,0)) AS city_avg 
-FROM users AS u
-JOIN all_sessions AS a_s USING(user_id)
-JOIN products AS p USING(product_id)
-JOIN sales_report AS sr USING(product_id)
+    FROM users AS u
+    JOIN all_sessions AS a_s USING(user_id)
+    JOIN products AS p USING(product_id)
+    JOIN sales_report AS sr USING(product_id)
 GROUP BY u.city
 ORDER BY city_avg DESC
 
 --calculating order avg by country
 SELECT u.country, CAST(AVG(total_ordered) AS numeric (5,0)) AS country_avg 
-FROM users AS u
-JOIN all_sessions AS a_s USING(user_id)
-JOIN products AS p USING(product_id)
-JOIN sales_report AS sr USING(product_id)
+    FROM users AS u
+    JOIN all_sessions AS a_s USING(user_id)
+    JOIN products AS p USING(product_id)
+    JOIN sales_report AS sr USING(product_id)
 GROUP BY u.country
 ORDER BY country_avg DESC
 
@@ -227,236 +228,236 @@ Answer:
 | Malta                | 0               |
 | Iceland              | 0               |
 
-| **city**              | **city_avg** |
-|-----------------------|--------------|
-| "Riyadh"              | 319          |
-| "Brno"                | 319          |
-| "Rexburg"             | 251          |
-| "Lisbon"              | 189          |
-| "Sacramento"          | 189          |
-| "Kalamazoo"           | 105          |
-| "Saint Petersburg"    | 101          |
-| "Avon"                | 100          |
-| "Rome"                | 98           |
-| "Sherbrooke"          | 97           |
-| "Longtan District"    | 97           |
-| "Nashville"           | 94           |
-| "Santa Monica"        | 90           |
-| "Dubai"               | 89           |
-| "Shinjuku"            | 73           |
-| "Pune"                | 71           |
-| "Westville"           | 70           |
-| "Rio de Janeiro"      | 65           |
-| "Vladivostok"         | 62           |
-| "Bellingham"          | 62           |
-| "Santa Fe"            | 60           |
-| "San Antonio"         | 58           |
-| "Seoul"               | 55           |
-| "Menlo Park"          | 52           |
-| "Athens"              | 51           |
-| "Palo Alto"           | 48           |
-| "Zhongli District"    | 46           |
-| "Salem"               | 45           |
-| "Indore"              | 44           |
-| "Belo Horizonte"      | 43           |
-| "Boston"              | 40           |
-| "Bangkok"             | 38           |
-| "Hanoi"               | 38           |
-| "Hong Kong"           | 36           |
-| "Santa Clara"         | 35           |
-| "Hamburg"             | 34           |
-| "Kitchener"           | 34           |
-| "Pozuelo de Alarcon"  | 34           |
-| "Munich"              | 33           |
-| "San Bruno"           | 32           |
-| "Phoenix"             | 32           |
-| "Dublin"              | 31           |
-| "Bellflower"          | 30           |
-| "Cork"                | 30           |
-| "Toronto"             | 26           |
-| "Tel Aviv-Yafo"       | 26           |
-| "Seattle"             | 26           |
-| "Mumbai"              | 26           |
-| "Milan"               | 26           |
-| "Los Angeles"         | 25           |
-| "Mississauga"         | 25           |
-| "Irvine"              | 24           |
-| "Mountain View"       | 23           |
-| "Montreuil"           | 23           |
-| "Madrid"              | 23           |
-| "Pittsburgh"          | 22           |
-| "Buenos Aires"        | 22           |
-| "Charlotte"           | 22           |
-| "Chicago"             | 22           |
-| "San Francisco"       | 22           |
-| "Melbourne"           | 22           |
-| "Ann Arbor"           | 22           |
-| "Amsterdam"           | 22           |
-| "Santiago"            | 21           |
-| "Vancouver"           | 21           |
-| "Austin"              | 21           |
-| "N/A"                 | 20           |
-| "Calgary"             | 20           |
-| "Sydney"              | 20           |
-| "Bogota"              | 20           |
-| "Philadelphia"        | 20           |
-| "Kolkata"             | 19           |
-| "San Jose"            | 19           |
-| "Sao Paulo"           | 19           |
-| "Oakland"             | 19           |
-| "Berlin"              | 18           |
-| "Ahmedabad"           | 18           |
-| "Sunnyvale"           | 18           |
-| "Ho Chi Minh City"    | 18           |
-| "London"              | 18           |
-| "New York"            | 18           |
-| "Cupertino"           | 18           |
-| "Redwood City"        | 18           |
-| "Hyderabad"           | 17           |
-| "Barcelona"           | 17           |
-| "Chennai"             | 17           |
-| "Copenhagen"          | 16           |
-| "Warsaw"              | 16           |
-| "Ghent"               | 16           |
-| "Houston"             | 16           |
-| "Kuala Lumpur"        | 16           |
-| "Redmond"             | 15           |
-| "Bucharest"           | 15           |
-| "Prague"              | 15           |
-| "Perth"               | 14           |
-| "Budapest"            | 14           |
-| "Quebec City"         | 14           |
-| "Singapore"           | 14           |
-| "Paris"               | 13           |
-| "Akron"               | 13           |
-| "Montreal"            | 13           |
-| "La Victoria"         | 13           |
-| "LaFayette"           | 13           |
-| "Lake Oswego"         | 13           |
-| "Chandigarh"          | 13           |
-| "Cambridge"           | 13           |
-| "The Dalles"          | 13           |
-| "Asuncion"            | 13           |
-| "Wrexham"             | 13           |
-| "Mexico City"         | 12           |
-| "Washington"          | 12           |
-| "Dallas"              | 12           |
-| "Minato"              | 12           |
-| "Osaka"               | 12           |
-| "Detroit"             | 12           |
-| "Gurgaon"             | 12           |
-| "Zurich"              | 11           |
-| "Ipoh"                | 11           |
-| "Istanbul"            | 11           |
-| "Jaipur"              | 11           |
-| "Kiev"                | 11           |
-| "Manila"              | 11           |
-| "New Delhi"           | 11           |
-| "Bengaluru"           | 10           |
-| "San Diego"           | 10           |
-| "Jakarta"             | 10           |
-| "Stockholm"           | 10           |
-| "Burnaby"             | 10           |
-| "Taguig"              | 10           |
-| "Atlanta"             | 9            |
-| "South San Francisco" | 9            |
-| "Kirkland"            | 9            |
-| "Courbevoie"          | 8            |
-| "Moscow"              | 8            |
-| "Montevideo"          | 8            |
-| "Thessaloniki"        | 7            |
-| "East Lansing"        | 7            |
-| "Oviedo"              | 7            |
-| "Fremont"             | 7            |
-| "Frankfurt"           | 7            |
-| "Medellin"            | 7            |
-| "St. Louis"           | 7            |
-| "Helsinki"            | 6            |
-| "San Mateo"           | 6            |
-| "Bandung"             | 6            |
-| "Nanded"              | 6            |
-| "Tempe"               | 6            |
-| "Kharagpur"           | 6            |
-| "Yokohama"            | 6            |
-| "Orlando"             | 5            |
-| "Quezon City"         | 5            |
-| "Denver"              | 5            |
-| "Columbia"            | 5            |
-| "Vienna"              | 5            |
-| "Timisoara"           | 5            |
-| "Jacksonville"        | 5            |
-| "Boulder"             | 5            |
-| "University Park"     | 5            |
-| "Richardson"          | 4            |
-| "Culiacan"            | 4            |
-| "Kharkiv"             | 4            |
-| "Brussels"            | 4            |
-| "Eau Claire"          | 4            |
-| "Doha"                | 4            |
-| "Ashburn"             | 4            |
-| "Marseille"           | 4            |
-| "Portland"            | 4            |
-| "Poznan"              | 4            |
-| "Izmir"               | 4            |
-| "Cluj-Napoca"         | 4            |
-| "Colombo"             | 4            |
-| "Milpitas"            | 3            |
-| "Madison"             | 3            |
-| "Adelaide"            | 3            |
-| "Norfolk"             | 3            |
-| "Petaling Jaya"       | 3            |
-| "Jersey City"         | 3            |
-| "Druid Hills"         | 3            |
-| "Stanford"            | 3            |
-| "Wellesley"           | 3            |
-| "Zagreb"              | 3            |
-| "Las Vegas"           | 2            |
-| "Chico"               | 2            |
-| "Iasi"                | 2            |
-| "Brisbane"            | 2            |
-| "Antwerp"             | 2            |
-| "Council Bluffs"      | 2            |
-| "Maracaibo"           | 2            |
-| "Salford"             | 2            |
-| "Greer"               | 1            |
-| "Lahore"              | 1            |
-| "Piscataway Township" | 1            |
-| "Rosario"             | 1            |
-| "Kansas City"         | 1            |
-| "Oslo"                | 1            |
-| "Villeneuve-d'Ascq"   | 1            |
-| "Vilnius"             | 1            |
-| "Patna"               | 1            |
-| "Edmonton"            | 1            |
-| "Nagoya"              | 0            |
-| "Lucknow"             | 0            |
-| "Beijing"             | 0            |
-| "Makati"              | 0            |
-| "Auckland"            | 0            |
-| "Waterloo"            | 0            |
-| "Westlake Village"    | 0            |
-| "Manchester"          | 0            |
-| "Marlboro"            | 0            |
-| "Fortaleza"           | 0            |
-| "Forest Park"         | 0            |
-| "San Salvador"        | 0            |
-| "Goose Creek"         | 0            |
-| "Coventry"            | 0            |
-| "Hayward"             | 0            |
-| "Indianapolis"        | 0            |
-| "Shibuya"             | 0            |
-| "Chuo"                | 0            |
-| "South El Monte"      | 0            |
-| "Pleasanton"          | 0            |
-| "St. John's"          | 0            |
-| "Minneapolis"         | 0            |
-| "Karachi"             | 0            |
-| "Panama City"         | 0            |
-| "Tampa"               | 0            |
-| "Bratislava"          | 0            |
-| "London(U.S.)"        | 0            |
-| "Nairobi"             | 0            |
 
+| **city**            | **city_avg** |
+|---------------------|--------------|
+| Riyadh              | 319          |
+| Brno                | 319          |
+| Rexburg             | 251          |
+| Lisbon              | 189          |
+| Sacramento          | 189          |
+| Kalamazoo           | 105          |
+| Saint Petersburg    | 101          |
+| Avon                | 100          |
+| Rome                | 98           |
+| Sherbrooke          | 97           |
+| Longtan District    | 97           |
+| Nashville           | 94           |
+| Santa Monica        | 90           |
+| Dubai               | 89           |
+| Shinjuku            | 73           |
+| Pune                | 71           |
+| Westville           | 70           |
+| Rio de Janeiro      | 65           |
+| Vladivostok         | 62           |
+| Bellingham          | 62           |
+| Santa Fe            | 60           |
+| San Antonio         | 58           |
+| Seoul               | 55           |
+| Menlo Park          | 52           |
+| Athens              | 51           |
+| Palo Alto           | 48           |
+| Zhongli District    | 46           |
+| Salem               | 45           |
+| Indore              | 44           |
+| Belo Horizonte      | 43           |
+| Boston              | 40           |
+| Bangkok             | 38           |
+| Hanoi               | 38           |
+| Hong Kong           | 36           |
+| Santa Clara         | 35           |
+| Hamburg             | 34           |
+| Kitchener           | 34           |
+| Pozuelo de Alarcon  | 34           |
+| Munich              | 33           |
+| San Bruno           | 32           |
+| Phoenix             | 32           |
+| Dublin              | 31           |
+| Bellflower          | 30           |
+| Cork                | 30           |
+| Toronto             | 26           |
+| Tel Aviv-Yafo       | 26           |
+| Seattle             | 26           |
+| Mumbai              | 26           |
+| Milan               | 26           |
+| Los Angeles         | 25           |
+| Mississauga         | 25           |
+| Irvine              | 24           |
+| Mountain View       | 23           |
+| Montreuil           | 23           |
+| Madrid              | 23           |
+| Pittsburgh          | 22           |
+| Buenos Aires        | 22           |
+| Charlotte           | 22           |
+| Chicago             | 22           |
+| San Francisco       | 22           |
+| Melbourne           | 22           |
+| Ann Arbor           | 22           |
+| Amsterdam           | 22           |
+| Santiago            | 21           |
+| Vancouver           | 21           |
+| Austin              | 21           |
+| N/A                 | 20           |
+| Calgary             | 20           |
+| Sydney              | 20           |
+| Bogota              | 20           |
+| Philadelphia        | 20           |
+| Kolkata             | 19           |
+| San Jose            | 19           |
+| Sao Paulo           | 19           |
+| Oakland             | 19           |
+| Berlin              | 18           |
+| Ahmedabad           | 18           |
+| Sunnyvale           | 18           |
+| Ho Chi Minh City    | 18           |
+| London              | 18           |
+| New York            | 18           |
+| Cupertino           | 18           |
+| Redwood City        | 18           |
+| Hyderabad           | 17           |
+| Barcelona           | 17           |
+| Chennai             | 17           |
+| Copenhagen          | 16           |
+| Warsaw              | 16           |
+| Ghent               | 16           |
+| Houston             | 16           |
+| Kuala Lumpur        | 16           |
+| Redmond             | 15           |
+| Bucharest           | 15           |
+| Prague              | 15           |
+| Perth               | 14           |
+| Budapest            | 14           |
+| Quebec City         | 14           |
+| Singapore           | 14           |
+| Paris               | 13           |
+| Akron               | 13           |
+| Montreal            | 13           |
+| La Victoria         | 13           |
+| LaFayette           | 13           |
+| Lake Oswego         | 13           |
+| Chandigarh          | 13           |
+| Cambridge           | 13           |
+| The Dalles          | 13           |
+| Asuncion            | 13           |
+| Wrexham             | 13           |
+| Mexico City         | 12           |
+| Washington          | 12           |
+| Dallas              | 12           |
+| Minato              | 12           |
+| Osaka               | 12           |
+| Detroit             | 12           |
+| Gurgaon             | 12           |
+| Zurich              | 11           |
+| Ipoh                | 11           |
+| Istanbul            | 11           |
+| Jaipur              | 11           |
+| Kiev                | 11           |
+| Manila              | 11           |
+| New Delhi           | 11           |
+| Bengaluru           | 10           |
+| San Diego           | 10           |
+| Jakarta             | 10           |
+| Stockholm           | 10           |
+| Burnaby             | 10           |
+| Taguig              | 10           |
+| Atlanta             | 9            |
+| South San Francisco | 9            |
+| Kirkland            | 9            |
+| Courbevoie          | 8            |
+| Moscow              | 8            |
+| Montevideo          | 8            |
+| Thessaloniki        | 7            |
+| East Lansing        | 7            |
+| Oviedo              | 7            |
+| Fremont             | 7            |
+| Frankfurt           | 7            |
+| Medellin            | 7            |
+| St. Louis           | 7            |
+| Helsinki            | 6            |
+| San Mateo           | 6            |
+| Bandung             | 6            |
+| Nanded              | 6            |
+| Tempe               | 6            |
+| Kharagpur           | 6            |
+| Yokohama            | 6            |
+| Orlando             | 5            |
+| Quezon City         | 5            |
+| Denver              | 5            |
+| Columbia            | 5            |
+| Vienna              | 5            |
+| Timisoara           | 5            |
+| Jacksonville        | 5            |
+| Boulder             | 5            |
+| University Park     | 5            |
+| Richardson          | 4            |
+| Culiacan            | 4            |
+| Kharkiv             | 4            |
+| Brussels            | 4            |
+| Eau Claire          | 4            |
+| Doha                | 4            |
+| Ashburn             | 4            |
+| Marseille           | 4            |
+| Portland            | 4            |
+| Poznan              | 4            |
+| Izmir               | 4            |
+| Cluj-Napoca         | 4            |
+| Colombo             | 4            |
+| Milpitas            | 3            |
+| Madison             | 3            |
+| Adelaide            | 3            |
+| Norfolk             | 3            |
+| Petaling Jaya       | 3            |
+| Jersey City         | 3            |
+| Druid Hills         | 3            |
+| Stanford            | 3            |
+| Wellesley           | 3            |
+| Zagreb              | 3            |
+| Las Vegas           | 2            |
+| Chico               | 2            |
+| Iasi                | 2            |
+| Brisbane            | 2            |
+| Antwerp             | 2            |
+| Council Bluffs      | 2            |
+| Maracaibo           | 2            |
+| Salford             | 2            |
+| Greer               | 1            |
+| Lahore              | 1            |
+| Piscataway Township | 1            |
+| Rosario             | 1            |
+| Kansas City         | 1            |
+| Oslo                | 1            |
+| Villeneuve-d'Ascq   | 1            |
+| Vilnius             | 1            |
+| Patna               | 1            |
+| Edmonton            | 1            |
+| Nagoya              | 0            |
+| Lucknow             | 0            |
+| Beijing             | 0            |
+| Makati              | 0            |
+| Auckland            | 0            |
+| Waterloo            | 0            |
+| Westlake Village    | 0            |
+| Manchester          | 0            |
+| Marlboro            | 0            |
+| Fortaleza           | 0            |
+| Forest Park         | 0            |
+| San Salvador        | 0            |
+| Goose Creek         | 0            |
+| Coventry            | 0            |
+| Hayward             | 0            |
+| Indianapolis        | 0            |
+| Shibuya             | 0            |
+| Chuo                | 0            |
+| South El Monte      | 0            |
+| Pleasanton          | 0            |
+| St. John's          | 0            |
+| Minneapolis         | 0            |
+| Karachi             | 0            |
+| Panama City         | 0            |
+| Tampa               | 0            |
+| Bratislava          | 0            |
+| London(U.S.)        | 0            |
+| Nairobi             | 0            |
 
 
 

@@ -69,19 +69,73 @@ Answer:
 
 
 
-Question 2: 
+Question 2: What is the number of visits by year?
 
 SQL Queries:
+```SQL
+
+--difference in date column accross two tables, decided to union them to get all values
+WITH union_years AS (SELECT DISTINCT visit_id, date FROM all_sessions
+                     UNION
+                     SELECT DISTINCT visit_id, date FROM analytics),
+
+--exttacting years from union table					 
+year_selection AS(SELECT
+                  CASE
+                      WHEN EXTRACT(YEAR FROM date) = 2016
+                      THEN 2016
+	              WHEN EXTRACT(YEAR FROM date) = 2017
+	              THEN 2017
+	              WHEN EXTRACT(YEAR FROM date) = 2018
+	              THEN 2018
+	              ELSE 2099
+		  END AS years
+FROM union_years)
+
+SELECT years, COUNT(years) AS visits
+FROM year_selection
+GROUP BY years
+
+```
 
 Answer:
+| years | visits |
+|-------|--------|
+| 2017  | 153109 |
+| 2016  | 6657   |
 
 
-
-Question 3: 
+Question 3: What insights can be gained by comparing page views and number of sales?
 
 SQL Queries:
+```SQL
+
+WITH views_sold AS(SELECT page_views, SUM(units_sold) AS total_sold FROM analytics
+WHERE units_sold IS NOT NULL AND page_views IS NOT NULL 
+GROUP BY page_views
+ORDER BY total_sold DESC)
+
+SELECT page_views, total_sold, ROW_NUMBER()OVER(ORDER BY total_sold DESC)
+FROM views_sold
+
+```
 
 Answer:
+| page_views | total_sold | rank |
+|------------|------------|------|
+| 14         | 24329      | 1    |
+| 23         | 18439      | 2    |
+| 24         | 15654      | 3    |
+| 15         | 14744      | 4    |
+| 19         | 12731      | 5    |
+| 30         | 12150      | 6    |
+| 18         | 11688      | 7    |
+| 29         | 11493      | 8    |
+| 17         | 11385      | 9    |
+| 21         | 11060      | 10   |
+
+The top 10 amount of sales are for page views between 10 and 30
+The lowest amount of sales are between 90 and 100 page views
 
 
 

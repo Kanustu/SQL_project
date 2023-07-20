@@ -16,14 +16,26 @@ Below, provide the SQL queries you used to clean your data.
 UPDATE all_sessions
 SET country = 'N/A'
 WHERE country = '(not set)'
-
+```
+```SQL
 UPDATE all_sessions
 SET city = 'N/A'
 WHERE city = '(not set)'
-
+```
+```SQL
 UPDATE all_sessions
 SET city = 'N/A'
 WHERE city = 'not available in the demo dataset'
 
 ```
+- CTE used in questions to alter the revenue total per the included hint
+```SQL
 
+WITH cte_revenue AS (SELECT
+                     CASE
+                         WHEN revenue IS NULL
+	                     THEN 0
+	                     ELSE CAST(revenue/1000000 AS numeric(13,2))
+                     END revenue
+                     FROM analytics)
+```

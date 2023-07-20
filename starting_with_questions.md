@@ -22,14 +22,22 @@ SELECT country, SUM(total_transaction_revenue) AS total_country_revenue
 GROUP BY country
     HAVING SUM(total_transaction_revenue) > 0
 ORDER BY total_country_revenue DESC
-
+```
+```SQL
+--cleaned revenue column
+WITH cte_revenue AS (SELECT
+                     CASE
+                         WHEN total_transaction_revenue IS NULL
+	                     THEN 0
+	                     ELSE CAST(total_transaction_revenue/1000000 AS numeric(13,2))
+                     END AS total_transaction_revenue, city, country
+                     FROM all_sessions)
 -- cities with highest revenue
 SELECT city, SUM(total_transaction_revenue) AS total_city_revenue
     FROM cte_revenue 
 GROUP BY city
     HAVING city != 'N/A' AND SUM(total_transaction_revenue) > 0
 ORDER BY total_city_revenue DESC
-
 ```
 
 
@@ -83,6 +91,8 @@ SELECT u.city, CAST(AVG(total_ordered) AS numeric(5,0)) AS city_avg
 GROUP BY u.city
 ORDER BY city_avg DESC
 
+```
+```SQL
 --calculating order avg by country
 SELECT u.country, CAST(AVG(total_ordered) AS numeric (5,0)) AS country_avg 
     FROM users AS u
@@ -91,7 +101,6 @@ SELECT u.country, CAST(AVG(total_ordered) AS numeric (5,0)) AS country_avg
     JOIN sales_report AS sr USING(product_id)
 GROUP BY u.country
 ORDER BY country_avg DESC
-
 ```
 
 
@@ -466,7 +475,50 @@ Answer:
 
 
 SQL Queries:
+```SQL
 
+--products sold per category in each city
+SELECT u.city, a.v2_product_category
+FROM all_sessions AS a
+    JOIN users as u USING(user_id)
+    JOIN analytics AS an USING(user_id)
+--filter out category and city that are not valid
+WHERE v2_product_category NOT IN('(not set)', '${escCatTitle}') AND a.city != 'N/A'
+GROUP BY u.city, a.v2_product_category
+    HAVING COUNT(units_sold) > 0
+
+
+-- seems that a majority of the orders are coming from California
+-- at least from the citites we have values for
+
+```
+
+1. Mountainview has a large variety of categories
+2. seems that a majority of the orders are coming from California, at least from the cities we have values for
+
+```SQL
+
+--products sold per category in each country
+SELECT u.country, a.v2_product_category
+FROM all_sessions AS a
+    JOIN users as u USING(user_id)
+    JOIN analytics AS an USING(user_id)
+--filter out category and city that are not valid
+WHERE v2_product_category NOT IN('(not set)', '${escCatTitle}') AND u.country != 'N/A'
+--AND v2_product_category LIKE '%Women%'
+GROUP BY u.country, a.v2_product_category
+    HAVING COUNT(units_sold) > 0
+
+-- United States has the most amount/variety of categories
+-- Men's clothing makes up 18% of the categories accross all countries
+-- Women's clothing makes up 4.5% of the categories accross all countries
+
+
+
+```
+1. United States has the most amount/variety of categories
+2. Men's clothing makes up 18% of the categories accross all countries
+3. Women's clothing makes up 4.5% of the categories accross all countries
 
 
 Answer:
@@ -479,6 +531,42 @@ Answer:
 
 
 SQL Queries:
+```SQL
+
+--highest selling product per city
+WITH highest_per_city AS(SELECT 
+			    u.city, 
+			    v2_product_name AS product, 
+			    SUM(units_sold) AS total_sold, 
+			    RANK()OVER(PARTITION BY u.city ORDER BY SUM(units_sold) DESC) AS highest_sold
+			 FROM all_sessions AS a
+                            JOIN users AS u USING(user_id)
+                            JOIN analytics AS an USING(user_id)
+                         WHERE units_sold IS NOT NULL AND u.city != 'N/A'
+                         GROUP BY u.city, v2_product_name)
+			
+SELECT * FROM highest_per_city
+WHERE highest_sold = 1
+
+```
+```SQL
+
+--highest selling product per country
+WITH highest_per_country AS(SELECT 
+			    u.country, 
+			    v2_product_name AS product, 
+			    SUM(units_sold) AS total_sold, 
+			    RANK()OVER(PARTITION BY u.country ORDER BY SUM(units_sold) DESC) AS highest_sold
+			FROM all_sessions AS a
+                JOIN users AS u USING(user_id)
+                JOIN analytics AS an USING(user_id)
+            WHERE units_sold IS NOT NULL AND u.country != 'N/A'
+            GROUP BY u.country, v2_product_name)
+			
+SELECT country, product, total_sold FROM highest_per_country
+WHERE highest_sold = 1
+
+```
 
 
 

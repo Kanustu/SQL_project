@@ -39,3 +39,7 @@ WITH cte_revenue AS (SELECT
                      END revenue
                      FROM analytics)
 ```
+- Where statement used within several queries to filter out unwanted values
+```SQL
+WHERE units_sold IS NOT NULL AND u.city != 'N/A'
+```

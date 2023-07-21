@@ -80,7 +80,7 @@ Answer:
 
 
 SQL Queries:
-Calculating average order size per city
+- Calculating average order size per city
 ```SQL
 
 SELECT u.city, CAST(AVG(units_sold) AS numeric(5,0)) AS city_avg 
@@ -91,7 +91,7 @@ GROUP BY u.city
 ORDER BY city_avg DESC
 
 ```
-Calculating average order size per country
+- Calculating average order size per country
 ```SQL
 SELECT u.country, CAST(AVG(units_sold) AS numeric(5,0)) AS country_avg 
     FROM users AS u

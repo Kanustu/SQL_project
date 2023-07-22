@@ -2,56 +2,32 @@
 
 ## Project/Goals
 The objective of this project is to leverage the SQL skills acquired during the last 6 weeks of the Lighthouse Labs SQL course to transform, analyze, and gain insights from a provided dataset.
-Data Understanding and Exploration:
-
-Familiarize ourselves with the dataset's schema and structure.
-Identify the various tables and their relationships within the dataset.
-Perform preliminary exploratory data analysis (EDA) to gain initial insights into the data.
-Data Cleaning and Transformation:
-
-Identify and handle missing values, outliers, and data inconsistencies.
-Convert data types where necessary for proper analysis.
-Perform necessary data transformations to make it suitable for analysis.
-Addressing Specific Questions:
-
-Answer the predefined questions provided in the assignment, utilizing SQL queries to extract relevant information.
-Analyze and interpret the results obtained to derive insights and make data-driven conclusions.
-Exploring Additional Questions:
-
-Formulate new, meaningful questions that can be answered using the given dataset.
-Develop SQL queries to address these self-generated questions.
-Uncover new patterns, trends, or correlations within the data.
-Data Visualization:
-
-Create visually appealing charts, graphs, or dashboards to present the insights obtained.
-Use visualization techniques to better communicate complex findings to stakeholders.
-Documentation and Reporting:
-
-Maintain clear and concise documentation throughout the project, including explanations of SQL queries, data cleaning steps, and analysis techniques used.
-Compile a comprehensive report summarizing the key findings and insights from the project.
-
 
 ## Process
 ### Data Understanding and Exploration
-- created the schema and structure of the database using the given csv's
+
+I created the schema and structure of the database using the given CSVs. Initially, I set up tables with VARCHAR and INT data types where possible, to load the information and have a look at the data.
+
+After exploring the data and gaining some understanding of its contents, I went back through each column to adjust the data types as needed.
+
 ### Data Cleaning and Transformation
-- [details](SQL_project/cleaning_data.md)
+I utilized queries to identify and handle duplicates, nulls, and irrelevant information in the dataset, helping to ensure data accuracy. Additionally, I effectively used CTEs (Common Table Expressions) to transform the data as needed to address specific project questions.
 ### Addressing Specific Questions
-- details
+I used my SQL skills to query the data and address the five primary questions presented for analysis.
 ### Exploring Additional Questions
-- details
-### Documentation
-- details
+I generated and addressed additional questions to dig deeper into the available data, extending the scope of the analysis.
+### Quality checked results
+I employed specific queries to verify if the obtained results fell within the acceptable range of answers. Throughout the process, my quality assurance checks failed on several occasions, enabling me to review and revise the initial queries accordingly.
+
 ## Results
-- I discovered that the data, though incomplete did have information on the revenue, units sold, unit price, types of products sold
-within several cities and countries. It also had information on the city and country of the visitors to the website, and some of their interactions with the website
-- I looked for patterns and trends in the data to answer the questions that were asked
+I discovered that the data, though incomplete, did contain information on the revenue, units sold, unit price, and types of products sold within several cities and countries. It also included information on the city and country of the website visitors, as well as some of their interactions with the website. I looked for patterns and trends in the data to answer the questions that were asked.
 ## Challenges 
-- Lack of complete data sets
-- Lack of accuraccy between tables with what seemed to be the same information
-- Lack of time to tackle everything I would of liked to
+During this project, I faced several challenges that affected my progress. First, there was a lack of complete data sets, which made it hard to draw clear conclusions and make informed decisions. Also, I found it difficult to ensure accuracy between tables, even though they appeared to have the same information; they often had differences that caused confusion and inefficiency. Lastly, I didn't have enough time to tackle everything I wanted to work on. Despite these obstacles, I did my best with the available resources and tried to deliver accurate results within the given limitations.
 ## Future Goals
-- Spend more time trying to understand what some of the data is actually representing
-- Spend more time cleaning up category titles and product names
-- Probaly try to clean up the all_sessions table, maybe break it down into smaller more manageable tables
-  userid, visitid, productid
+If I had more time, I would prioritize three things to improve my analysis of the given data:
+
+1. I would spend additional time gaining a deeper understanding of the data's meaning and representation. This would enable me to extract more insights and draw more accurate conclusions from the information available to me.
+
+2. I would focus on standardizing the category titles and product names within the dataset. By increasing consistency and accuracy, I could enhance the quality of my analysis and decision-making processes, leading to more reliable outcomes.
+
+3. I would consider optimizing the structure of the "all_sessions" table. Breaking it down into smaller, more manageable tables based on user IDs, visit IDs, and product IDs. However, I would discuss the benefits of doing that with someone knowledgeable in this space before proceeding.

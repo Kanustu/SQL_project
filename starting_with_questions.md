@@ -5,39 +5,47 @@ Answer the following questions and provide the SQL queries used to find the answ
 
 
 SQL Queries:
-
+- Using the revenue table from analytics instead of the total transaction revenue column from all_sessions table
+  as the analytics revenue table has over 15k values compared to the 81 in the all_sessions table
 ```SQL
---cleaned revenue column
-WITH cte_revenue AS (SELECT
-                     CASE
-                         WHEN total_transaction_revenue IS NULL
-	                     THEN 0
-	                     ELSE CAST(total_transaction_revenue/1000000 AS numeric(13,2))
-                     END AS total_transaction_revenue, city, country
-                     FROM all_sessions)
-                     
--- countries with highest revenue
-SELECT country, SUM(total_transaction_revenue) AS total_country_revenue
-    FROM cte_revenue 
-GROUP BY country
-    HAVING SUM(total_transaction_revenue) > 0
-ORDER BY total_country_revenue DESC
+-- cleaning up the revenue and unit price values
+WITH cte_city AS(SELECT
+                     DISTINCT visit_id,
+                     revenue/1000000 AS revenue,
+                     unit_price/1000000 AS unit_price,
+                     units_sold,
+                     city
+                 FROM analytics
+                     JOIN users AS u USING(user_id)
+                 WHERE revenue IS NOT NULL AND city IS NOT NULL AND city != 'N/A')
+-- 
+SELECT
+    city,
+    CAST(SUM(revenue) AS numeric(8,2)) AS rev_total
+FROM cte_city
+GROUP BY city
+ORDER BY rev_total DESC
+
 ```
 ```SQL
---cleaned revenue column
-WITH cte_revenue AS (SELECT
-                     CASE
-                         WHEN total_transaction_revenue IS NULL
-	                     THEN 0
-	                     ELSE CAST(total_transaction_revenue/1000000 AS numeric(13,2))
-                     END AS total_transaction_revenue, city, country
-                     FROM all_sessions)
--- cities with highest revenue
-SELECT city, SUM(total_transaction_revenue) AS total_city_revenue
-    FROM cte_revenue 
-GROUP BY city
-    HAVING city != 'N/A' AND SUM(total_transaction_revenue) > 0
-ORDER BY total_city_revenue DESC
+-- cleaning up the revenue and unitprice columns
+WITH cte_country AS(SELECT
+                        DISTINCT visit_id,
+                        revenue/1000000 AS revenue,
+                        unit_price/1000000 AS unit_price,
+                        units_sold,
+                        country
+                    FROM analytics
+                        JOIN users AS u USING(user_id)
+                    WHERE revenue IS NOT NULL AND country IS NOT NULL AND country != 'N/A')
+
+SELECT
+    country,
+    CAST(SUM(revenue) AS numeric(8,2)) AS rev_total
+FROM cte_country
+GROUP BY country
+ORDER BY rev_total DESC
+
 ```
 
 
@@ -45,36 +53,42 @@ ORDER BY total_city_revenue DESC
 
 Answer:
 
-| **country**   | **total_country_revenue** |
-|---------------|---------------------------|
-| United States | 13154.17                  |
-| Israel        | 602.00                    |
-| Australia     | 358.00                    |
-| Canada        | 150.15                    |
-| Switzerland   | 16.99                     |
+| city                | rev_total |
+|---------------------|-----------|
+| Mountain View       | 10034.00  |
+| San Bruno           | 4229.00   |
+| New York            | 2999.00   |
+| Sunnyvale           | 2991.00   |
+| Chicago             | 1382.00   |
+| Kirkland            | 1098.00   |
+| San Francisco       | 938.00    |
+| Jersey City         | 933.00    |
+| Charlotte           | 926.00    |
+| Los Angeles         | 922.00    |
+| Seattle             | 726.00    |
+| Palo Alto           | 709.00    |
+| Austin              | 638.00    |
+| Milpitas            | 490.00    |
+| Toronto             | 445.00    |
+| Ann Arbor           | 350.00    |
+| Salem               | 241.00    |
+| San Jose            | 233.00    |
+| Cambridge           | 144.00    |
+| Fremont             | 124.00    |
+| Atlanta             | 83.00     |
+| South San Francisco | 81.00     |
+| Denver              | 41.00     |
+| Yokohama            | 29.00     |
+| Zurich              | 16.00     |
 
+| country       | rev_total |
+|---------------|-----------|
+| United States | 55762     |
+| Canada        | 445       |
+| Germany       | 69        |
+| Japan         | 29        |
+| Switzerland   | 16        |
 
-| **city**      | **total_city_revenue** |
-|---------------|------------------------|
-| San Francisco | 1564.32                |
-| Sunnyvale     | 992.23                 |
-| Atlanta       | 854.44                 |
-| Palo Alto     | 608.00                 |
-| Tel Aviv-Yafo | 602.00                 |
-| New York      | 598.35                 |
-| Mountain View | 483.36                 |
-| Los Angeles   | 479.48                 |
-| Chicago       | 449.52                 |
-| Seattle       | 358.00                 |
-| Sydney        | 358.00                 |
-| San Jose      | 262.38                 |
-| Austin        | 157.78                 |
-| Nashville     | 157.00                 |
-| San Bruno     | 103.77                 |
-| Toronto       | 82.16                  |
-| Houston       | 38.98                  |
-| Columbus      | 21.99                  |
-| Zurich        | 16.99                  |
 
 **Question 2: What is the average number of products ordered from visitors in each city and country?**
 
@@ -224,7 +238,9 @@ Answer:
 SQL Queries:
 ```SQL
 
-SELECT DISTINCT v2_product_category, city
+SELECT
+    DISTINCT v2_product_category,
+    city
 FROM all_sessions
 WHERE v2_product_category NOT IN('(not set)', '${escCatTitle}') AND city != 'N/A'
 AND transactions IS NOT NULL

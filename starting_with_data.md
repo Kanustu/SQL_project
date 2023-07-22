@@ -4,8 +4,8 @@ SQL Queries:
 ```SQL
 
 --getting total visitors by country
-WITH country_totals AS (SELECT country, COUNT(*) As count 
-						FROM users
+WITH country_totals AS (SELECT country, COUNT(*) As count
+                        FROM users
                         WHERE country IS NOT NULL AND country != 'N/A'
                         GROUP BY country),
 --getting percentage of users from each country
@@ -15,18 +15,18 @@ country_percentage AS (SELECT country,
                        ORDER BY percentage DESC),
 --ranking the countries
 country_ranked AS (SELECT country, percentage, 
-				   ROW_NUMBER()OVER(ORDER BY percentage DESC) AS rank
-				   FROM country_percentage),
+                   ROW_NUMBER()OVER(ORDER BY percentage DESC) AS rank
+                   FROM country_percentage),
 --seperating the top 10 including rank from the total group
 top_10 AS (SELECT country, percentage, 
-		   ROW_NUMBER()OVER(ORDER BY percentage DESC) AS rank
-		   FROM country_percentage
-		   ORDER BY rank LIMIT 10),
+           ROW_NUMBER()OVER(ORDER BY percentage DESC) AS rank
+           FROM country_percentage
+           ORDER BY rank LIMIT 10),
 --seperating bottom 10 from total group
 bottom_10 AS (SELECT country, percentage, 
-			  ROW_NUMBER()OVER(ORDER BY percentage DESC) AS rank
-			  FROM country_percentage
-			  ORDER BY rank DESC LIMIT 10),
+              ROW_NUMBER()OVER(ORDER BY percentage DESC) AS rank
+              FROM country_percentage
+              ORDER BY rank DESC LIMIT 10),
 --union function to put top and bottom in one table
 union_top_bottom AS (SELECT country, percentage, rank 
                      FROM top_10
@@ -105,7 +105,7 @@ Answer:
 | 2016  | 6657   |
 
 
-Question 3: What insights can be gained by comparing page views and number of sales?
+Question 3: What insights, if any can be gained by comparing page views and number of sales?
 
 SQL Queries:
 ```SQL

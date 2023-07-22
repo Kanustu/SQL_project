@@ -35,7 +35,7 @@ Compile a comprehensive report summarizing the key findings and insights from th
 ### Data Understanding and Exploration
 - created the schema and structure of the database using the given csv's
 ### Data Cleaning and Transformation
-- details
+- [details](SQL_project/cleaning_data.md)
 ### Addressing Specific Questions
 - details
 ### Exploring Additional Questions

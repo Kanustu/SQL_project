@@ -32,16 +32,44 @@ USING date::date
 
 - created a users table to attempt to increase referrential integrity
 ```SQL
-  CREATE TABLE users(user_id SERIAL,
-				   full_visitor_id varchar(25),
-				   city varchar(15),
-				   country varchar(15));
+CREATE TABLE users(user_id SERIAL,
+                   full_visitor_id varchar(25),
+                   city varchar(25),
+                   country varchar(25));
 ```
 - used full_visitor_id to update users table to populate user_id column
 ```SQL
-
-
+--getting all full_visitor_id's from across the system
+WITH join_users AS (SELECT full_visitor_id FROM all_sessions
+                    UNION
+                    SELECT full_visitor_id FROM analytics)
+--using the complete full_visitor_id to populate users table
+INSERT INTO users(full_visitor_id)
+SELECT * FROM join_users
 ```
+```SQL
+-- updating city column in users table
+UPDATE users
+SET city = all_sessions.city
+FROM all_sessions
+WHERE users.full_visitor_id = all_sessions.full_visitor_id
+```
+```SQL
+-- updating country column in users table
+UPDATE users
+SET country = all_sessions.country
+FROM all_sessions
+WHERE users.full_visitor_id = all_sessions.full_visitor_id
+```
+- there is a London, U.S. and a London, U.K which could affect results, changed London, U.S. to London(U.S.).
+```SQL
+SELECT * FROM all_sessions
+WHERE city = 'London' AND country != 'United Kingdom'
+
+UPDATE all_sessions
+SET city = 'London(U.S.)'
+WHERE city = 'London' AND country != 'United Kingdom'
+
 - Increased uniformity between the invalid values within city and country
 ```SQL
 

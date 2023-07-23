@@ -221,34 +221,59 @@ The only discernible pattern is the overall popularity of Nest products, particu
 
 SQL Queries:
 --revenue by month by city
-WITH month_rev as(SELECT city, TO_CHAR(date, 'Month') AS month, SUM(revenue/1000000) AS revenue FROM analytics
-JOIN users AS u USING(user_id)
-WHERE revenue IS NOT NULL AND city IS NOT NULL AND city != 'N/A'
-GROUP BY city, date)
+WITH month_rev as(SELECT
+                      city,
+                      TO_CHAR(date, 'Month') AS month,
+                      SUM(revenue/1000000) AS revenue
+                  FROM analytics
+                      JOIN users AS u USING(user_id)
+                  WHERE revenue IS NOT NULL AND city IS NOT NULL AND city != 'N/A'
+                  GROUP BY city, date)
 
-SELECT city, month, SUM(revenue), RANK()OVER(PARTITION BY city ORDER BY SUM(revenue) DESC) AS month_rev_rank FROM month_rev 
+SELECT
+    city,
+    month,
+    SUM(revenue),
+    RANK()OVER(PARTITION BY city ORDER BY SUM(revenue) DESC) AS month_rev_rank
+FROM month_rev 
 GROUP BY month, city
 ```
 ```SQL
 --revenue by country by month
-WITH month_rev as(SELECT country, TO_CHAR(date, 'Month') AS month, SUM(revenue/1000000) AS revenue FROM analytics
-JOIN users AS u USING(user_id)
-WHERE revenue IS NOT NULL AND country IS NOT NULL AND country != 'N/A'
-GROUP BY country, date)
+WITH month_rev as(SELECT
+                      country,
+                      TO_CHAR(date, 'Month') AS month,
+                      SUM(revenue/1000000) AS revenue
+                  FROM analytics
+                      JOIN users AS u USING(user_id)
+                  WHERE revenue IS NOT NULL AND country IS NOT NULL AND country != 'N/A'
+                  GROUP BY country, date)
 
-
-SELECT country, month, SUM(revenue), RANK()OVER(PARTITION BY country ORDER BY SUM(revenue) DESC) AS month_rev_rank FROM month_rev 
+SELECT
+    country,
+    month,
+    SUM(revenue),
+    RANK()OVER(PARTITION BY country ORDER BY SUM(revenue) DESC) AS month_rev_rank FROM month_rev 
 GROUP BY month, country
 ```
 ```SQL
 
 --overall revenue by month
-WITH month_rev as(SELECT city, TO_CHAR(date, 'Month') AS month, SUM(revenue/1000000) AS revenue FROM analytics
-JOIN users AS u USING(user_id)
-WHERE revenue IS NOT NULL AND city IS NOT NULL AND city != 'N/A'
-GROUP BY city, date)
+WITH month_rev as(SELECT
+                      city,
+                      TO_CHAR(date, 'Month') AS month,
+                      SUM(revenue/1000000) AS revenue
+                  FROM analytics
+                      JOIN users AS u USING(user_id)
+                  WHERE revenue IS NOT NULL AND city IS NOT NULL AND city != 'N/A'
+                  GROUP BY city, date)
 
-SELECT month, SUM(revenue) FROM month_rev GROUP BY month ORDER BY month DESC
+SELECT
+    month,
+    SUM(revenue)
+FROM month_rev
+GROUP BY month
+ORDER BY month DESC
 ```
 
 

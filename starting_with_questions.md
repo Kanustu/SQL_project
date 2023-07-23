@@ -164,9 +164,7 @@ ORDER BY prod_count DESC
 ```
 
 Answer:
-- The most popular products across all cities are those belonging to Nest USA, followed closely by apparel items.
-- The majority of purchases come from within the USA, and the USA also offers the widest variety of product categories.
-
+Nest USA products dominate as the most favored across all cities, with apparel items coming in a close second. The bulk of purchases originate within the USA, which also has the most extensive range of product categories.
 
 
 **Question 4: What is the top-selling product from each city/country? Can we find any pattern worthy of noting in the products sold?**
@@ -219,12 +217,45 @@ The only discernible pattern is the overall popularity of Nest products, particu
 
 **Question 5: Can we summarize the impact of revenue generated from each city/country?**
 
+```SQL
+
 SQL Queries:
+--revenue by month by city
+WITH month_rev as(SELECT city, TO_CHAR(date, 'Month') AS month, SUM(revenue/1000000) AS revenue FROM analytics
+JOIN users AS u USING(user_id)
+WHERE revenue IS NOT NULL AND city IS NOT NULL AND city != 'N/A'
+GROUP BY city, date)
+
+SELECT city, month, SUM(revenue), RANK()OVER(PARTITION BY city ORDER BY SUM(revenue) DESC) AS month_rev_rank FROM month_rev 
+GROUP BY month, city
+```
+```SQL
+--revenue by country by month
+WITH month_rev as(SELECT country, TO_CHAR(date, 'Month') AS month, SUM(revenue/1000000) AS revenue FROM analytics
+JOIN users AS u USING(user_id)
+WHERE revenue IS NOT NULL AND country IS NOT NULL AND country != 'N/A'
+GROUP BY country, date)
+
+
+SELECT country, month, SUM(revenue), RANK()OVER(PARTITION BY country ORDER BY SUM(revenue) DESC) AS month_rev_rank FROM month_rev 
+GROUP BY month, country
+```
+```SQL
+
+--overall revenue by month
+WITH month_rev as(SELECT city, TO_CHAR(date, 'Month') AS month, SUM(revenue/1000000) AS revenue FROM analytics
+JOIN users AS u USING(user_id)
+WHERE revenue IS NOT NULL AND city IS NOT NULL AND city != 'N/A'
+GROUP BY city, date)
+
+SELECT month, SUM(revenue) FROM month_rev GROUP BY month ORDER BY month DESC
+```
+
 
 
 
 Answer:
-
+The revenue appears consistent on a monthly basis, with Mountainview emerging as the top revenue-generating location overall. Additionally, among all the countries, the United States stands out as the highest revenue contributor.
 
 
 

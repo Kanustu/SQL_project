@@ -18,23 +18,23 @@ country_ranked AS (SELECT country, percentage,
                    ROW_NUMBER()OVER(ORDER BY percentage DESC) AS rank
                    FROM country_percentage),
 --seperating the top 10 including rank from the total group
-top_10 AS (SELECT country, percentage, 
+top_5 AS (SELECT country, percentage, 
            ROW_NUMBER()OVER(ORDER BY percentage DESC) AS rank
            FROM country_percentage
-           ORDER BY rank LIMIT 10),
+           ORDER BY rank LIMIT 5),
 --seperating bottom 10 from total group
-bottom_10 AS (SELECT country, percentage, 
+bottom_5 AS (SELECT country, percentage, 
               ROW_NUMBER()OVER(ORDER BY percentage DESC) AS rank
               FROM country_percentage
-              ORDER BY rank DESC LIMIT 10),
+              ORDER BY rank DESC LIMIT 5),
 --union function to put top and bottom in one table
 union_top_bottom AS (SELECT country, percentage, rank 
-                     FROM top_10
+                     FROM top_5
 
                      UNION
 
                      SELECT country, percentage, rank 
-                     FROM bottom_10)
+                     FROM bottom_5)
 --ordering again by rank to maintain proper rank order					 
 SELECT * 
 FROM union_top_bottom
@@ -79,7 +79,7 @@ WITH union_years AS (SELECT DISTINCT visit_id, date FROM all_sessions
                      UNION
                      SELECT DISTINCT visit_id, date FROM analytics),
 
---exttacting years from union table					 
+--extracting years from union table					 
 year_selection AS(SELECT
                   CASE
                       WHEN EXTRACT(YEAR FROM date) = 2016

@@ -106,7 +106,9 @@ WHERE units_sold IS NOT NULL AND u.city != 'N/A';
 - Checking for duplicates/nulls
 ```SQL
 
-SELECT full_visitor_id, 'duplicate value' AS reason
+SELECT
+    full_visitor_id,
+    'duplicate value' AS reason
 FROM(
 SELECT full_visitor_id, COUNT(*) AS counted
 FROM all_sessions
@@ -115,7 +117,9 @@ WHERE counted > 1
 
 UNION ALL
 
-SELECT full_visitor_id, 'null value' AS reason
+SELECT
+    full_visitor_id,
+    'null value' AS reason
 FROM all_sessions
 WHERE full_visitor_id IS NULL
 GROUP BY full_visitor_id;
@@ -124,13 +128,17 @@ GROUP BY full_visitor_id;
 - checking for nulls, incorrect values
 ```SQL
 
-SELECT channel_grouping, 'null value' AS reason
+SELECT
+    channel_grouping,
+    'null value' AS reason
 FROM all_sessions
 WHERE channel_grouping IS NULL
 
 UNION ALL
 
-SELECT channel_grouping, 'incorrect value' AS reason
+SELECT
+    channel_grouping,
+    'incorrect value' AS reason
 FROM all_sessions
 WHERE channel_grouping NOT IN ('Organic Search', 'Display', 'Referral', 'Paid Search', 'Affiliates',  'Direct', '(Other)');
 
@@ -138,25 +146,33 @@ WHERE channel_grouping NOT IN ('Organic Search', 'Display', 'Referral', 'Paid Se
 - checking for nulls
 ```SQL
 
-SELECT city, 'null value' AS reason FROM all_sessions
+SELECT
+    city,
+    'null value' AS reason FROM all_sessions
 WHERE city IS NULL
 
 UNION ALL
 
-SELECT country, 'null value' AS reason FROM all_sessions
+SELECT
+    country,
+    'null value' AS reason FROM all_sessions
 WHERE country IS NULL;
 ```
 - checking for duplicate values, format issues
 ```SQL
 
-SELECT visit_id, 'duplicate value' AS reason
+SELECT
+    visit_id,
+    'duplicate value' AS reason
 FROM (SELECT visit_id, COUNT(*) AS counted FROM all_Sessions
 GROUP BY visit_id) AS qa_check
 WHERE counted > 1
 
 UNION ALL
 
-SELECT visit_id, 'wrong format' AS reason
+SELECT
+    visit_id,
+    'wrong format' AS reason
 FROM all_Sessions
 WHERE visit_id NOT LIKE '1%';
 

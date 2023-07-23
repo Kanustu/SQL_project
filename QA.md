@@ -12,30 +12,43 @@ Describe your QA process and include the SQL queries used to execute it.
 
 ```SQL
 -- used on question 1 to crosscheck for QA purposes
-SELECT country, SUM(revenue) FROM users AS u
-JOIN analytics AS a USING(user_id)
+SELECT
+    country,
+    SUM(revenue)
+FROM users AS u
+    JOIN analytics AS a USING(user_id)
 WHERE country IS NOT NULL AND revenue IS NOT NULL
-GROUP BY country
+GROUP BY country;
 ```
 ```SQL
 -- used as QA on question 1 to crosscheck for QA purposes
-SELECT city, SUM(revenue) FROM users AS u
-JOIN analytics AS a USING(user_id)
+SELECT
+    city,
+    SUM(revenue)
+FROM users AS u
+    JOIN analytics AS a USING(user_id)
 WHERE city IS NOT NULL AND revenue IS NOT NULL AND city != 'N/A'
-GROUP BY city
+GROUP BY city;
 ```
 ```SQL
 -- QA for question 2
-SELECT city FROM all_sessions AS a
-FULL OUTER JOIN analytics AS b USING(user_id)
+SELECT
+    city
+FROM all_sessions AS a
+    FULL OUTER JOIN analytics AS b USING(user_id)
 WHERE units_sold IS NOT NULL AND city != 'N/A'
-GROUP BY city
+GROUP BY city;
 ```
 ```SQL
 -- QA for question 2
-SELECT city FROM all_sessions AS a
-FULL OUTER JOIN analytics AS b USING(user_id)
+SELECT
+    city
+FROM all_sessions AS a
+    FULL OUTER JOIN analytics AS b USING(user_id)
 WHERE units_sold IS NOT NULL AND city != 'N/A'
-GROUP BY city
-SELECT * FROM analytics
+GROUP BY city;
+```
+```SQL
+-- used as QA on question 4
+SELECT city FROM all_sessions WHERE product_quantity IS NOT NULL AND city != 'N/A';
 ```

@@ -1,4 +1,4 @@
-Question 1: What are the top 10 and bottom 10 countries based on the percentage of visitors from each country?
+Question 1: What are the top 5 and bottom 5 countries based on the percentage of visitors from each country?
 
 SQL Queries:
 ```SQL
